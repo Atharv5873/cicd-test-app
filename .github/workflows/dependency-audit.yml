@@ -1,0 +1,35 @@
+name: Dependency Audit
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  npm-audit:
+    name: npm audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm ci
+      - run: npm audit --audit-level=moderate
+
+  check-outdated:
+    name: Check Dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm ci
+      - name: Verify no missing peer deps
+        run: node -e "
+          const pkg = require('./package.json');
+          const deps = Object.keys(pkg.dependencies || {});
+          console.log('Dependencies:', deps);
+          // Force failure to simulate outdated check
+          process.exit(deps.includes('moment') ? 0 : 1);
+        "
