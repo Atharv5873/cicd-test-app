@@ -1,15 +1,19 @@
 const axios = require('axios')
 
 const BASE_URL = process.env.API_URL || 'http://localhost:8000'
-const unusedConfig = { timeout: 5000 }  // ← no-unused-vars
+const requestConfig = { timeout: 5000 }
 
 async function fetchRuns() {
-  const response = await axios.get(`${BASE_URL}/runs`)
+  const response = await axios.get(`${BASE_URL}/runs`, requestConfig)
   return response.data
 }
 
+function transformData(data) {
+  return data
+}
+
 async function processResponse(data) {
-  const processed = transformData(data)  // ← transformData not defined, no-undef
+  const processed = transformData(data)
   return processed
 }
 

@@ -1,7 +1,7 @@
 import os
 import sys
 
-def validate_environment(required_vars)  # ← SyntaxError: missing colon
+def validate_environment(required_vars):
     missing = []
     for var in required_vars:
         if not os.getenv(var):
